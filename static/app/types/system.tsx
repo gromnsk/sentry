@@ -132,7 +132,6 @@ export interface Config {
   messages: {level: keyof Theme['alert']; message: string}[];
   needsUpgrade: boolean;
 
-  organizationBaseUrl: string;
   organizationUrl: string | undefined;
   privacyUrl: string | null;
   sentryConfig: {
