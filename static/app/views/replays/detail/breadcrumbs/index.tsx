@@ -12,7 +12,7 @@ import {relativeTimeInMs} from 'sentry/components/replays/utils';
 import {t} from 'sentry/locale';
 import space from 'sentry/styles/space';
 import {Crumb} from 'sentry/types/breadcrumbs';
-import {EventTransaction} from 'sentry/types/event';
+// import {EventTransaction} from 'sentry/types/event';
 import {getPrevBreadcrumb} from 'sentry/utils/replays/getBreadcrumb';
 
 import BreadcrumbItem from './breadcrumbItem';
@@ -27,18 +27,9 @@ function CrumbPlaceholder({number}: {number: number}) {
   );
 }
 
-type Props = {
-  /**
-   * Raw breadcrumbs, `undefined` means it is still loading
-   */
-  crumbs: Crumb[] | undefined;
-  /**
-   * Root replay event, `undefined` means it is still loading
-   */
-  event: EventTransaction | undefined;
-};
+type Props = {};
 
-function Breadcrumbs({event, crumbs: allCrumbs}: Props) {
+function Breadcrumbs({}: Props) {
   const {
     setCurrentTime,
     setCurrentHoverTime,
@@ -47,14 +38,17 @@ function Breadcrumbs({event, crumbs: allCrumbs}: Props) {
     highlight,
     removeHighlight,
     clearAllHighlights,
+    replay,
   } = useReplayContext();
 
-  const startTimestamp = event?.startTimestamp || 0;
+  const startTimestamp = replay?.getEvent()?.startTimestamp || 0;
 
   const isLoaded = Boolean(event);
 
   const crumbs =
-    allCrumbs?.filter(crumb => !['console'].includes(crumb.category || '')) || [];
+    replay
+      ?.getRawCrumbs()
+      ?.filter(crumb => !['console'].includes(crumb.category || '')) || [];
 
   const currentUserAction = getPrevBreadcrumb({
     crumbs,
